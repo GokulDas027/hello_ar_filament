@@ -1,11 +1,7 @@
 package com.example.ar.core.filament.hello.ar.presentation
 
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.view.WindowInsets
-import android.view.WindowInsetsController
 import android.widget.Toast
 import com.example.ar.core.filament.hello.ar.helpers.CameraPermissionHelper
 import com.example.ar.core.filament.hello.ar.helpers.FullScreenHelper
@@ -42,16 +38,16 @@ class ArActivity : AppCompatActivity() {
         grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (!CameraPermissionHelper.hasCameraPermission(this)) {
+        if (!CameraPermissionHelper.hasCameraPermission(this@ArActivity)) {
             // Use toast instead of snackbar here since the activity will exit.
             Toast.makeText(
                 this,
                 "Camera permission is required to run this application",
                 Toast.LENGTH_LONG
             ).show()
-            if (!CameraPermissionHelper.shouldShowRequestPermissionRationale(this)) {
+            if (!CameraPermissionHelper.shouldShowRequestPermissionRationale(this@ArActivity)) {
                 // Permission denied with checking "Do not ask again".
-                CameraPermissionHelper.launchPermissionSettings(this)
+                CameraPermissionHelper.launchPermissionSettings(this@ArActivity)
             }
             // Finish activity if camera permission is not provided
             finish()
