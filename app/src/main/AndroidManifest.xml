@@ -26,7 +26,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HelloFilamentArCore">
         <activity
-            android:name=".ar.ArActivity"
+            android:name=".ar.presentation.ArActivity"
             android:exported="true"
             android:configChanges="orientation|keyboardHidden|screenSize|screenLayout"
             android:launchMode="singleTask"
