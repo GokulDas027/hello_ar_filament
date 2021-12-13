@@ -3,6 +3,7 @@ package com.example.ar.core.filament.hello.ar.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.example.ar.core.filament.hello.ar.helpers.CameraPermissionHelper
 import com.example.ar.core.filament.hello.ar.helpers.FullScreenHelper
@@ -18,7 +19,8 @@ const val TAG = "ArActivity"
 class ArActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityArBinding
-    private lateinit var arSceneSession: ArCoreSession
+    lateinit var arCoreSession: ArCoreSession
+    lateinit var arScene: ArScene
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +32,9 @@ class ArActivity : AppCompatActivity() {
         // Full Screen
         FullScreenHelper.configFullScreen(this@ArActivity)
 
-        arSceneSession = ArCoreSession(this@ArActivity)
+        arCoreSession = ArCoreSession(this@ArActivity)
 
-        arSceneSession.exceptionCallback =
+        arCoreSession.exceptionCallback =
             { exception ->
                 val message =
                     when (exception) {
@@ -49,8 +51,11 @@ class ArActivity : AppCompatActivity() {
                 SnackbarHelper().showError(this, message)
             }
 
-        arSceneSession.beforeSessionResume = ::configureSession
-        lifecycle.addObserver(arSceneSession)
+        arCoreSession.beforeSessionResume = ::configureSession
+        lifecycle.addObserver(arCoreSession)
+
+        arScene = ArScene(this@ArActivity, binding.surfaceView)
+        lifecycle.addObserver(arScene)
     }
 
     override fun onResume() {

@@ -63,6 +63,8 @@ class ArCoreSession(
     }
 
     override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
+
         val session = this.session ?: tryCreateSession() ?: return
         try {
             beforeSessionResume?.invoke(session)
@@ -75,6 +77,8 @@ class ArCoreSession(
 
     override fun onPause(owner: LifecycleOwner) {
         session?.pause()
+
+        super.onPause(owner)
     }
 
     override fun onDestroy(owner: LifecycleOwner) {
@@ -84,5 +88,7 @@ class ArCoreSession(
         // https://developers.google.com/ar/reference/java/arcore/reference/com/google/ar/core/Session#close()
         session?.close()
         session = null
+
+        super.onDestroy(owner)
     }
 }
