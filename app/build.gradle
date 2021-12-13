@@ -1,18 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-//    id 'filament-tools-plugin'
 }
 
-// filament-tools-plugin: create .filamat material files on compile helper script
-//filamentTools {
-//    materialInputDir = project.layout.projectDirectory.dir("src/main/materials")
-//    materialOutputDir = project.layout.projectDirectory.dir("src/main/assets/materials")
-//}
-//
-//clean.doFirst {
-//    delete "src/main/assets/materials"
-//}
+apply plugin: FilamentToolsPlugin
 
 android {
     compileSdk 31
@@ -76,20 +67,17 @@ dependencies {
     implementation "com.google.android.filament:filament-android:$filament_version"
     implementation "com.google.android.filament:filament-utils-android:$filament_version"
     implementation "com.google.android.filament:gltfio-android:$filament_version"
-
-    // math
-    implementation 'dev.romainguy:kotlin-math:1.0.1'
 }
 
 // create filamat files on compile helper script
-//filamentTools {
-//    materialInputDir.value(project.layout.projectDirectory.dir("src/main/materials"))
-//    materialOutputDir.value(project.layout.projectDirectory.dir("src/main/assets/materials"))
-//}
-//
-//clean.doFirst {
-//    delete "src/main/assets"
-//}
+filamentTools {
+    materialInputDir.value(project.layout.projectDirectory.dir("src/main/materials"))
+    materialOutputDir.value(project.layout.projectDirectory.dir("src/main/assets/materials"))
+}
+
+clean.doFirst {
+    delete "src/main/assets"
+}
 
 // 3d model credits for perry add to readme
 // "Perry" (https://skfb.ly/6Rrry) by Sprint is licensed under Creative Commons Attribution

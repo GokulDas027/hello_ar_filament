@@ -2,7 +2,7 @@
 buildscript {
     ext {
         kotlin_version = '1.6.0'
-        filament_version = '1.14.0'
+        filament_version = '1.14.2'
         arcore_version = '1.28.0'
     }
     repositories {
