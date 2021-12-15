@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.example.ar.core.filament.hello.ar.helpers.CameraPermissionHelper
 import com.example.ar.core.filament.hello.ar.helpers.FullScreenHelper
 import com.example.ar.core.filament.hello.ar.helpers.SnackbarHelper
@@ -13,6 +14,8 @@ import com.example.ar.core.filament.hello.databinding.ActivityArBinding
 import com.google.ar.core.Config
 import com.google.ar.core.Session
 import com.google.ar.core.exceptions.*
+import kotlinx.coroutines.delay
+import java.util.concurrent.TimeUnit
 
 const val TAG = "ArActivity"
 
@@ -56,6 +59,12 @@ class ArActivity : AppCompatActivity() {
 
         arScene = ArScene(this@ArActivity, binding.surfaceView)
         lifecycle.addObserver(arScene)
+
+        lifecycleScope.launchWhenStarted {
+            binding.handMotionContainer.visibility = View.VISIBLE
+            TimeUnit.SECONDS.toMillis(3).let { delay(it)}
+            binding.handMotionContainer.visibility = View.GONE
+        }
     }
 
     override fun onResume() {
