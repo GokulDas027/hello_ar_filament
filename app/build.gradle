@@ -37,11 +37,11 @@ android {
     buildFeatures {
         viewBinding true
     }
-    // Filament users .filamat extension for materials, compiled with matc
-    // Telling aapt to not compress them allows to load them efficiently
-    aaptOptions {
+    androidResources {
         noCompress 'filamat', 'ktx', 'glb', 'rgb32f', 'txt'
     }
+    // Filament users .filamat extension for materials, compiled with matc
+    // Telling aapt to not compress them allows to load them efficiently
 }
 
 dependencies {
