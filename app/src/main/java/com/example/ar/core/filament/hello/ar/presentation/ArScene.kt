@@ -236,32 +236,32 @@ class ArScene(
             object : DragGestureRecognizer.OnGestureStartedListener {
                 override fun onGestureStarted(gesture: DragGesture) {
                     update(
-                        surfaceView.toViewRect(),
-                        TouchEvent.Move(gesture.position.x, gesture.position.y),
+                        surfaceView,
+                        gesture,
                     )
 
                     gesture.setGestureEventListener(
                         object : DragGesture.OnGestureEventListener {
                             override fun onFinished(gesture: DragGesture) {
                                 update(
-                                    surfaceView.toViewRect(),
-                                    TouchEvent.Stop(gesture.position.x, gesture.position.y),
+                                    surfaceView,
+                                    gesture,
                                 )
                             }
 
                             override fun onUpdated(gesture: DragGesture) {
                                 update(
-                                    surfaceView.toViewRect(),
-                                    TouchEvent.Move(gesture.position.x, gesture.position.y),
+                                    surfaceView,
+                                    gesture,
                                 )
                             }
                         }
                     )
                 }
-                fun update(viewRect: ViewRect,touchEvent: TouchEvent) {
+                fun update(surfaceView: SurfaceView,gesture: DragGesture) {
                     ScreenPosition(
-                        x = touchEvent.x / viewRect.width,
-                        y = touchEvent.y / viewRect.height,
+                        x = gesture.position.x / surfaceView.width.toFloat(),
+                        y = gesture.position.y / surfaceView.height.toFloat(),
                     )
                         .let { ModelRenderer.ModelEvent.Move(it) }
                         .let { modelRenderer.updateModel(it) }
@@ -275,12 +275,12 @@ class ArScene(
                 (motionEvent.eventTime - motionEvent.downTime) < TAP_EVENT_MILLISECOND
             ) {
                 Pair(
-                    surfaceView.toViewRect(),
-                    TouchEvent.Stop(motionEvent.x, motionEvent.y),
-                ).let { (viewRect, touchEvent) ->
+                    surfaceView,
+                    motionEvent
+                ).let { (surfaceView, motionEvent) ->
                     ScreenPosition(
-                        x = touchEvent.x / viewRect.width,
-                        y = touchEvent.y / viewRect.height,
+                        x = motionEvent.x / surfaceView.width.toFloat(),
+                        y = motionEvent.y / surfaceView.height.toFloat(),
                     )
                         .let { ModelRenderer.ModelEvent.Move(it) }
                         .let { modelRenderer.updateModel(it) }

@@ -223,36 +223,6 @@ fun V4A.horizontalToUV(): V2A = v2aCreate(count, { i -> getX(i) * 10f }, { i -> 
 
 /** Activity Utils **/
 
-@Suppress("DEPRECATION")
-fun Activity.displayRotation(): Int =
-    (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) display
-    else windowManager.defaultDisplay)!!.rotation
-
-@Suppress("DEPRECATION")
-fun Activity.displayRotationDegrees(): Int =
-    when (displayRotation()) {
-        Surface.ROTATION_0 -> 0
-        Surface.ROTATION_90 -> 90
-        Surface.ROTATION_180 -> 180
-        Surface.ROTATION_270 -> 270
-        else -> throw Exception("Invalid Display Rotation")
-    }
-
-data class ViewRect(val left: Float, val top: Float, val width: Float, val height: Float)
-
-fun View.toViewRect(): ViewRect =
-    ViewRect(
-        left.toFloat(),
-        top.toFloat(),
-        width.toFloat(),
-        height.toFloat(),
-    )
-
-sealed class TouchEvent(val x: Float, val y: Float) {
-    class Move(x: Float, y: Float) : TouchEvent(x, y)
-    class Stop(x: Float, y: Float) : TouchEvent(x, y)
-}
-
 fun Pose.matrix(): M4 = FloatArray(16)
     .also { toMatrix(it, 0) }
     .let { M4(it) }
