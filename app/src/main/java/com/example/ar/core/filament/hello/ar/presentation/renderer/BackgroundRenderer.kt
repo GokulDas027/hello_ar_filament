@@ -38,7 +38,6 @@ class BackgroundRenderer(
     private val cameraStreamTextureId: Int = createExternalTextureId()
     private val entityManager: EntityManager = EntityManager.get()
 
-    private lateinit var stream: Stream
     private lateinit var depthTexture: Texture
     private lateinit var flatMaterialInstance: MaterialInstance
     private lateinit var depthMaterialInstance: MaterialInstance
@@ -49,6 +48,7 @@ class BackgroundRenderer(
     private var session: Session? = null
     private var hasDepthImage: Boolean = false
     private var displayRotationDegrees: Int = 0
+    private var frameTextureDimensions = IntArray(2)
 
     @Entity
     var flatRenderable: Int = 0
@@ -65,18 +65,7 @@ class BackgroundRenderer(
     fun setupScene(frame: Frame) {
         val camera = frame.camera
         val intrinsics = camera.textureIntrinsics
-        val dimensions = intrinsics.imageDimensions
-        val width = dimensions[0]
-        val height = dimensions[1]
-
-        Log.i(TAG, "updateScene: camera info width $width, height $height")
-
-        stream = Stream
-            .Builder()
-            .stream(cameraStreamTextureId.toLong()) // todo
-            .width(width)
-            .height(height)
-            .build(filament.engine)
+        frameTextureDimensions = intrinsics.imageDimensions
 
         setupFlatBackground()
     }
@@ -149,10 +138,12 @@ class BackgroundRenderer(
                     "cameraTexture",
                     Texture
                         .Builder()
+                        .importTexture(cameraStreamTextureId.toLong())
+                        .width(frameTextureDimensions[0])
+                        .height(frameTextureDimensions[1])
                         .sampler(Texture.Sampler.SAMPLER_EXTERNAL)
                         .format(Texture.InternalFormat.RGB8)
-                        .build(filament.engine)
-                        .apply { setExternalStream(filament.engine, stream) },
+                        .build(filament.engine),
                     TextureSampler(
                         TextureSampler.MinFilter.LINEAR,
                         TextureSampler.MagFilter.LINEAR,
@@ -254,10 +245,12 @@ class BackgroundRenderer(
                     "cameraTexture",
                     Texture
                         .Builder()
+                        .importTexture(cameraStreamTextureId.toLong())
+                        .width(frameTextureDimensions[0])
+                        .height(frameTextureDimensions[1])
                         .sampler(Texture.Sampler.SAMPLER_EXTERNAL)
                         .format(Texture.InternalFormat.RGB8)
-                        .build(filament.engine)
-                        .apply { setExternalStream(filament.engine, stream) },
+                        .build(filament.engine),
                     TextureSampler(
                         TextureSampler.MinFilter.LINEAR,
                         TextureSampler.MagFilter.LINEAR,
