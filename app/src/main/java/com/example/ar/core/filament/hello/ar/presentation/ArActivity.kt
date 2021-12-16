@@ -1,5 +1,6 @@
 package com.example.ar.core.filament.hello.ar.presentation
 
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -84,17 +85,22 @@ class ArActivity : AppCompatActivity() {
                 lightEstimationMode = Config.LightEstimationMode.ENVIRONMENTAL_HDR
 
                 // Depth API is used if it is configured in Hello AR's settings.
-                depthMode = Config.DepthMode.DISABLED // todo check depth rendering issue with latest filament
-//                    if (session.isDepthModeSupported(Config.DepthMode.AUTOMATIC)) {
-//                        Config.DepthMode.AUTOMATIC
-//                    } else {
-//                        Config.DepthMode.DISABLED
-//                    }
+                depthMode =
+                    if (session.isDepthModeSupported(Config.DepthMode.AUTOMATIC)) {
+                        Config.DepthMode.AUTOMATIC
+                    } else {
+                        Config.DepthMode.DISABLED
+                    }
 
                 // Instant Placement is enabled(LOCAL_Y_UP) or not
                 instantPlacementMode = Config.InstantPlacementMode.LOCAL_Y_UP
             }
         )
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        arScene.displayConfigurationChange()
     }
 
     override fun onRequestPermissionsResult(
